@@ -32,7 +32,6 @@ export const Auction = {
       .then(res => res.json())
   },
   create (params) {
-    console.log(`>>>>> requests ${params}`)
     return fetch(
       `${BASE_URL}/api/v1/auctions`,
       {

@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import {AuctionDetails} from '../AuctionDetails';
-import {BidList} from '../BidList';
 import {Auction} from '../../requests/auctions';
+import {BidList} from '../BidList';
+import {BidForm} from '../BidForm';
 import {Bid} from '../../requests/bids';
 
 class AuctionShowPage extends Component {
   constructor (props) {
-    console.log(`>>>>>>>>out ${props}  <<<<<<<<`);
+    console.log(`>>>>>>>>out ${props.auction}  <<<<<<<<`);
 
-    super(props)
-    console.log(`>>>>>>>>in ${props}  <<<<<<<<`);
+    super(props);
 
     this.state = {
       loading: true,
@@ -44,24 +44,44 @@ class AuctionShowPage extends Component {
 
     componentDidMount () {
       const {params} = this.props.match;
-      console.log(`>>>>>>>> ${params}  <<<<<<<<`);
 
       Auction
-        .get(params.id)
-        .then(auction => {
-          this.setState({auction, loading: false})
-        });
+      .get(params.id)
+      .then(auction => {
+        console.log(`>>>>>>>>auction.id ${params.id}  <<<<<<<<`);
+        this.setState({auction, loading: false})
+      });
 
       Bid
-        .all(params.id)
-        .then(bids => {
-          this.setState({bids: bids, loading: false})
-        });
+      .all(params.id)
+      .then(bids => {
+        this.setState({bids: bids, loading: false})
+      });
+    }
 
+    createBid () {
+      const {params} = this.props.match;
+      const {history} = this.props;
+      const {newBid, bids} = this.state;
+      Bid
+      .create(params.id, newBid)
+      .then((bid) => {
+        this.setState({
+          bids: bids.concat(bid)
+        })
+      });
+    }
+
+    updateNewBid (data) {
+      const {newBid} = this.state;
+      this.setState({
+        newBid: {...newBid, ...data}
+      });
+      console.log(this.state.newBid)
     }
 
     render () {
-      const {auction, bids, loading} = this.state;
+      const {auction, bids, loading, newBid} = this.state;
       // const {bids = []} = this.state.auction;
 
       if (loading) {
@@ -88,6 +108,11 @@ class AuctionShowPage extends Component {
           onClick={this.delete}
         >Delete</button>
         <h3>Bid</h3>
+        <BidForm
+          bid={newBid}
+          onChange={this.updateNewBid.bind(this)}
+          onSubmit={this.createBid.bind(this)}
+        />
         <BidList
           bids={bids}
           onBidDeleteClick={this.deleteBid}

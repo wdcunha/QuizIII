@@ -1,13 +1,21 @@
-class Api::V1::BidsController < ApplicationController
+class Api::V1::BidsController < Api::ApplicationController
   before_action :authenticate_user!, :find_auction
   before_action :find_bid, :authorize_user!, only: [:destroy]
+
+  def show
+  end
+
+  def index
+    @bids = @auction.bids.order(created_at: :desc)
+    render json: @bids
+  end
 
   def create
     @bid = Bid.new(bid_params)
     @bid.auction = @auction
     @bid.user = current_user
     if @bid.save!
-      render json: @bid, status 201
+      render json: @bid
     else
       render json: { error: @bid.errors.full_messages }
     end

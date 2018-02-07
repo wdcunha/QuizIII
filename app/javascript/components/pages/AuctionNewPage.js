@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BidForm} from '../BidForm';
+import {AuctionForm} from '../AuctionForm';
 import {Auction} from '../../requests/auctions';
 
 class AuctionNewPage extends Component {
@@ -9,7 +9,7 @@ class AuctionNewPage extends Component {
     this.state = {
       newAuction: {
         title: "",
-        body: ""
+        details: ""
       },
       validationErrors: []
     };
@@ -31,9 +31,6 @@ class AuctionNewPage extends Component {
     const {newAuction} = this.state;
     Auction
       .create(newAuction)
-      // .then(({id}) => {
-      //   history.push(`/auctions/${id}`)
-      // });
       .then(data => {
         if (data.errors) {
           this.setState({
@@ -48,7 +45,6 @@ class AuctionNewPage extends Component {
   }
 
   render () {
-    // const {newAuction} = this.state;
     const {newAuction, validationErrors} = this.state;
 
     return (
@@ -57,7 +53,7 @@ class AuctionNewPage extends Component {
         style={{padding: '0  20px'}}
       >
         <h2>Auctions</h2>
-        <BidForm
+        <AuctionForm
           errors={validationErrors}
           auction={newAuction}
           onChange={this.updateNewAuction}

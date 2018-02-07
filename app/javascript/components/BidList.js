@@ -10,10 +10,8 @@ function BidList (props) {
         {
           bids.map(bid => (
             <li key={bid.id}>
-            <BidDetails
-              {...bid}
-              onDeleteClick={onBidDeleteClick}
-            />
+              <BidDetails {...bid}
+              onDeleteClick={onBidDeleteClick} />
             </li>
           ))
         }

@@ -34,7 +34,7 @@ class AuctionIndexPage extends Component {
     }
 
   render () {
-    const {loading} = this.state;
+    const {loading, auctions} = this.state;
 
     if (loading) {
       return (

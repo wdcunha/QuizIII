@@ -36,12 +36,21 @@ function NavBar (props) {
           >
             Sign Out
           </a>
-        ]) : (          <Link
-            style={{marginLeft: 'auto', marginRight: '20px'}}
-            to="/sign_in"
-          >
-              Sign In
-          </Link>
+        ]) : (
+          <div>
+            <Link
+              style={{marginLeft: '30px', marginRight: '20px'}}
+              to="/sign_in"
+            >
+                Sign In
+            </Link>
+            <Link
+              style={{marginLeft: '10', marginRight: '20px'}}
+              to="/sign_up"
+            >
+              |  Sign up
+            </Link>
+          </div>
         )
       }
 

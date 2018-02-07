@@ -2,7 +2,9 @@ import React from 'react';
 
 function BidForm (props) {
   const {
-    bid = {},
+    bid = {
+      price: 0
+    },
     onSubmit = () => {},
     onChange = () => {},
     errors = []

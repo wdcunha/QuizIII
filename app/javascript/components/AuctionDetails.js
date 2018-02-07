@@ -12,9 +12,8 @@ function AuctionDetails (props = {}) {
       <h2> {props.title} </h2>
       <div style={containerStyle}>
         <p>{props.details}</p>
-        <p>By {author.full_name}</p>
-        <Field name="Created At" value={props.created_at} />
-        <Field name="Updated At" value={props.updated_at} />
+        <p>{props.ends_on}</p>
+        <p>$ {props.reserve_price}</p>
       </div>
     </div>
   );

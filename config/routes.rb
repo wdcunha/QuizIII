@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
       resources :auctions do
-        resources :bids, only: [:create, :destroy], shallow: true
+        resources :bids, only: [:index, :show, :create, :destroy], shallow: true
       end
       # match '/biddr', to: "api/v1/api/v1/biddr#index", shallow: true, via: :all
       # match '/biddr/*path', to: "api/v1/api/v1/biddr#index", shallow: true, via: :all

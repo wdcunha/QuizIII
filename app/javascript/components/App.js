@@ -4,6 +4,7 @@ import {
   AuctionIndexPage,
   AuctionNewPage,
   SignInPage,
+  SignUpPage,
   HomePage,
   NotFoundPage
 } from './pages';
@@ -19,15 +20,14 @@ import jwtDecode from 'jwt-decode';
 
 class App extends Component {
   constructor (props) {
-    console.log(`>>>>>>>>app out ${props}  <<<<<<<<`);
     super(props);
-    console.log(`>>>>>>>>app in ${props}  <<<<<<<<`);
 
     this.state = {
       user: null,
       loading: true
     };
     this.signIn = this.signIn.bind(this);
+    this.signUp = this.signUp.bind(this);
     this.signOut = this.signOut.bind(this);
   }
 
@@ -37,6 +37,16 @@ class App extends Component {
   }
 
   signIn () {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      const payload = jwtDecode(jwt);
+      this.setState({user: payload, loading: false});
+    } else {
+      this.setState({loading: false});
+    }
+  }
+
+  signUp () {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       const payload = jwtDecode(jwt);
@@ -73,10 +83,12 @@ class App extends Component {
               onSignOutClick={this.signOut}
             />
             <Switch>
-              <Route exact path="/"
-              component={HomePage} />
+              <Route exact path="/" component={HomePage} />
               <Route path="/sign_in" render={props => {
                 return <SignInPage {...props} onSignIn={this.signIn} /> }}
+              />
+              <Route path="/sign_up" render={props => {
+                return <SignUpPage {...props} onSignUp={this.signUp} /> }}
               />
               <AuthRoute
                 isAuthenticated={this.isAuth()}
@@ -88,11 +100,18 @@ class App extends Component {
                 path="/auctions/new"
                 component={AuctionNewPage}
               />
-              <AuthRoute
+              {/* <AuthRoute
                 isAuthenticated={this.isAuth()}
                 path="/auctions/:id"
-                component={AuctionShowPage}
-              />
+                render={AuctionShowPage}
+                {...props}
+              /> */}
+            <Route
+              path="/auctions/:id"
+              render={props => {
+              return <AuctionShowPage {...props} />
+             }}
+           />
               <Route component={NotFoundPage} />
             </Switch>
         </div>
