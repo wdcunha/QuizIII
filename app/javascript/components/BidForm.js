@@ -12,13 +12,14 @@ function BidForm (props) {
 
   const handleSubmit = event => {
     event.preventDefault();
-
+    console.log('handle Submit')
     onSubmit();
 
   };
 
   const handleChange = name => event => {
-    onChange({[name]: event.currentTarget.value});
+    onChange({[name]: event.currentTarget.value
+    });
   };
 
   const renderError = () => errors.length > 0 ? (
@@ -37,19 +38,15 @@ function BidForm (props) {
       onSubmit={handleSubmit}
     >
       <div>
-        <label htmlFor="bid">Bid</label> <br />
         <input
           onChange={handleChange("bid")}
           value={bid.bid}
           name="bid"
+          type="number"
           id="bid"
-        />
+        /> <input type="submit" value="Bid"/>
       </div>
       { renderError() }
-
-      <div>
-        <input type="submit" value="Bid"/>
-      </div>
     </form>
   );
 }

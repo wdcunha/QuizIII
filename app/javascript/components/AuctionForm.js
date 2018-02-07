@@ -1,4 +1,9 @@
 import React from 'react';
+import React from 'react';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+
+import 'node_modules/react-datepicker/src/stylesheets/react-datetime.css';
 
 function AuctionForm (props) {
   const {
@@ -18,6 +23,9 @@ function AuctionForm (props) {
   const handleChange = name => event => {
     onChange(
       {[name]: event.currentTarget.value});
+    this.setState({
+      startDate: auction.ends_on
+    });
   };
 
   const renderError = () => errors.length > 0 ? (
@@ -57,8 +65,12 @@ function AuctionForm (props) {
 
      <div>
        <label htmlFor="ends_on">Ends On</label> <br />
+       <DatePicker
+        selected={this.state.startDate}
+        onChange={this.handleChange}
+       />;
        <input
-         onChange={handleChange("ends_on")}
+         onChange={handleChange("startDate")}
          value={auction.ends_on}
          name="ends_on"
          id="ends_on"

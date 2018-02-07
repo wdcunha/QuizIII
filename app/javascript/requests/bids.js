@@ -30,7 +30,8 @@ export const Bid = {
     )
       .then(res => res.json())
   },
-  create (actionId, params) {
+  create (auctionId, params) {
+    console.log(auctionId)
     return fetch(
       `${BASE_URL}/api/v1/auctions/${auctionId}/bids`,
       {

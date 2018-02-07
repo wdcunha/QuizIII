@@ -7,11 +7,11 @@ import {Bid} from '../../requests/bids';
 
 class AuctionShowPage extends Component {
   constructor (props) {
-    console.log(`>>>>>>>>out ${props.auction}  <<<<<<<<`);
 
     super(props);
 
     this.state = {
+      startDate: moment(),
       loading: true,
       auction: {
         title: ""
@@ -19,7 +19,9 @@ class AuctionShowPage extends Component {
       bids: [],
       bid: {}
     };
-
+    this.handleChange = this.handleChange.bind(this);
+    this.createBid = this.createBid.bind(this);
+    this.updateNewBid = this.updateNewBid.bind(this);
     this.delete = this.delete.bind(this);
     this.deleteBid = this.deleteBid.bind(this);
 }
@@ -42,47 +44,46 @@ class AuctionShowPage extends Component {
     })
   }
 
-    componentDidMount () {
-      const {params} = this.props.match;
+  componentDidMount () {
+    const {params} = this.props.match;
+    Auction
+    .get(params.id)
+    .then(auction => {
+      this.setState({auction, loading: false})
+    });
 
-      Auction
-      .get(params.id)
-      .then(auction => {
-        console.log(`>>>>>>>>auction.id ${params.id}  <<<<<<<<`);
-        this.setState({auction, loading: false})
-      });
+    Bid
+    .all(params.id)
+    .then(bids => {
+      this.setState({bids: bids, loading: false})
+    });
+  }
 
-      Bid
-      .all(params.id)
-      .then(bids => {
-        this.setState({bids: bids, loading: false})
-      });
-    }
-
-    createBid () {
-      const {params} = this.props.match;
-      const {history} = this.props;
-      const {newBid, bids} = this.state;
-      Bid
-      .create(params.id, newBid)
-      .then((bid) => {
-        this.setState({
-          bids: bids.concat(bid)
-        })
-      });
-    }
+  createBid () {
+    console.log('start of create bid')
+    const {params} = this.props.match;
+    const {history} = this.props;
+    const {newBid, bids} = this.state;
+    console.log('params.id',params.id)
+    Bid
+    .create(params.id, newBid)
+    .then((bid) => {
+      this.setState({
+        bids: bids.concat(bid)
+      })
+    });
+  }
 
     updateNewBid (data) {
       const {newBid} = this.state;
       this.setState({
         newBid: {...newBid, ...data}
       });
-      console.log(this.state.newBid)
     }
 
     render () {
-      const {auction, bids, loading, newBid} = this.state;
-      // const {bids = []} = this.state.auction;
+      const {auction, loading} = this.state;
+      const {bids = [], newBid} = this.state.auction;
 
       if (loading) {
         return (
@@ -110,8 +111,8 @@ class AuctionShowPage extends Component {
         <h3>Bid</h3>
         <BidForm
           bid={newBid}
-          onChange={this.updateNewBid.bind(this)}
-          onSubmit={this.createBid.bind(this)}
+          onChange={this.updateNewBid}
+          onSubmit={this.createBid}
         />
         <BidList
           bids={bids}

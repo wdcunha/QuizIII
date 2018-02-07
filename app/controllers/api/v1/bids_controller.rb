@@ -1,13 +1,13 @@
 class Api::V1::BidsController < Api::ApplicationController
-  before_action :authenticate_user!, :find_auction
+  before_action :authenticate_user!
+  before_action :find_auction, only: [:index, :create]
   before_action :find_bid, :authorize_user!, only: [:destroy]
 
   def show
   end
 
   def index
-    @bids = @auction.bids.order(created_at: :desc)
-    render json: @bids
+    render json: @auction.bids
   end
 
   def create
